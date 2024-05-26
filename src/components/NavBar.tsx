@@ -14,7 +14,7 @@ async function NavBar() {
             <MaxWithWrapper>
                 <div className="flex h-14 items-center justify-between border-b border-zinc-200">
                     <Link href='/' className="flex z-40 font-semibold">
-                        cover<span className='text-green-600'>cobra</span>
+                        <span className='text-green-600'>cobra</span>cover
                     </Link>
 
                     <div className="h-full flex items-center space-x-4">

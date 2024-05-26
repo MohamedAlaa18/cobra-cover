@@ -24,7 +24,7 @@ export default function Home() {
   return (
     <div className='bg-slate-50'>
       <section>
-        <MaxWithWrapper className='pb-12 pt-10 lg:grid lg:grid-cols-3 sm:pb:16 lg:gap-x-0 xl:gap-x-8 lg:pt-20 xl:pt-24 lg:pb-28'>
+        <MaxWithWrapper className='pb-24  pt-10 lg:grid lg:grid-cols-3 sm:pb:32 lg:gap-x-0 xl:gap-x-8 lg:pt-24 xl:pt-32'>
           <div className='col-span-2 px-6 lg-px-0 lg:pt-4'>
             <div className='relative mx-auto text-center lg:text-left flex flex-col items-center lg:items-start'>
               <div className='absolute w-28 left-0 -top-20 hidden lg:block'>
@@ -40,7 +40,7 @@ export default function Home() {
               <p className='mt-8 text-lg lg:pr-10 max-w-prose text-center lg:text-left text-balance md:text-wrap'>
                 Capture your favorite memories with your own,
                 <span className='font-semibold'>one-of-one</span> phone cover.
-                coverCobra allows you to protect your memories, not just your
+                cobraCover allows you to protect your memories, not just your
                 phone cover.
               </p>
 
@@ -115,7 +115,7 @@ export default function Home() {
         </MaxWithWrapper>
       </section>
 
-      <section className='bg-slate-100 py-20'>
+      <section className='bg-slate-100 py-24'>
         <Testimonials />
 
         <div className='pt-16'>

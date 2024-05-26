@@ -7,12 +7,12 @@ import { cn } from "@/lib/utils";
 import Phone from "./Phone";
 
 const Phones = [
-    '/testimonials/7.jpg',
     '/testimonials/2.jpg',
     '/testimonials/3.jpg',
     '/testimonials/4.jpg',
     '/testimonials/5.jpg',
-    '/testimonials/6.jpg'
+    '/testimonials/6.jpg',
+    '/testimonials/7.jpg'
 ];
 
 function splitArray<T>(array: Array<T>, numParts: number) {
@@ -125,13 +125,14 @@ function ReviewGrid() {
 
 function Reviews() {
     return (
-        <MaxWithWrapper className="relative max-w-5xl  flex items-center justify-center">
+        <MaxWithWrapper className="relative max-w-5xl flex items-center justify-center">
             <Image
-                width={100} height={100}
+                width={200} height={200}
                 src='/what-people-are-buying.png'
                 alt='people'
-                className='absolute select-none hidden xl:block -left-32 top-1/3'
+                className='absolute select-none hidden xl:block -left-32 top-1/3 w-40 lg:w-52'
                 aria-hidden='true' />
+
             <ReviewGrid />
         </MaxWithWrapper>
     );

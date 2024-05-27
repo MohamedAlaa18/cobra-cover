@@ -1,4 +1,5 @@
 'use client'
+
 import HandleComponent from "@/components/HandleComponent";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -6,7 +7,7 @@ import { cn, formatPrice } from "@/lib/utils";
 import Image from "next/image";
 import { Rnd } from 'react-rnd';
 import { RadioGroup } from '@headlessui/react';
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { colors, finishes, materials, models } from "@/app/validators/option-validator";
 import { Label } from "@/components/ui/label";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
@@ -14,6 +15,8 @@ import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Check, ChevronsUpDown } from "lucide-react";
 import { base_price } from "@/app/config/products";
+import { useUploadThing } from "@/lib/uploadthing";
+import { toast } from "@/components/ui/use-toast";
 
 interface DesignConfigurationProps {
   configId: string,
@@ -27,7 +30,7 @@ function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConf
   const [options, setOptions] = useState<{
     color: (typeof colors)[number],
     model: (typeof models.options)[number],
-    material: (typeof materials.options)[number]
+    material: (typeof materials.options)[number],
     finish: (typeof finishes.options)[number]
   }>({
     color: colors[0],
@@ -43,13 +46,87 @@ function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConf
     }));
   };
 
+  const [renderedDimension, setRenderedDimension] = useState({
+    width: imageDimensions.width / 4,
+    height: imageDimensions.height / 4,
+  });
+
+  const [renderedPosition, setRenderedPosition] = useState({
+    x: 150,
+    y: 205,
+  });
+
+  const phoneCoverRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { startUpload } = useUploadThing("imageUploader")
+
+  async function saveConfiguration() {
+    try {
+      const { left: coverLeft, top: coverTop, width, height } = phoneCoverRef.current!.getBoundingClientRect();
+
+      const { left: containerLeft, top: containerTop } = containerRef.current!.getBoundingClientRect();
+
+      const leftOffset = coverLeft - containerLeft;
+      const topOffset = coverTop - containerTop;
+
+      const actualX = renderedPosition.x - leftOffset;
+      const actualY = renderedPosition.y - topOffset;
+
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+
+      const userImage = new window.Image();
+      userImage.crossOrigin = "anonymous";
+      userImage.src = imageUrl;
+      await new Promise((resolve) => userImage.onload = resolve);
+
+      ctx?.drawImage(
+        userImage,
+        actualX,
+        actualY,
+        renderedDimension.width,
+        renderedDimension.height,
+      );
+
+      const base64 = canvas.toDataURL();
+      const base64Data = base64.split(',')[1];
+
+      const blob = base64ToBlob(base64Data, "image/png");
+
+      const file = new File([blob], "filename.png", { type: "image/png" });
+
+      await startUpload([file], { configId });
+    } catch (error) {
+      toast({
+        title: "Some thing went Wrong",
+        description: "there was a problem saving  your configuration ,please try again.",
+        variant: 'destructive'
+      })
+    }
+  }
+
+  function base64ToBlob(base64: string, mimeType: string): Blob {
+    const byteCharacters = atob(base64);
+    const byteNumbers = new Array(byteCharacters.length);
+
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    return new Blob([byteArray], { type: mimeType });
+  }
+
   return (
     <div className="relative mt-20 grid grid-cols-1 lg:grid-cols-3 mb-20 pb-20">
-      <div className="relative h-[37.5rem] overflow-hidden col-span-2
+      <div ref={containerRef} className="relative h-[37.5rem] overflow-hidden col-span-2
        w-full max-w-4xl flex items-center justify-center rounded-lg border-2 border-dashed border-gray-300 pt-12 text-center
       focus:ring-2 focus:ring-primary focus:ring-offset-2">
         <div className="relative w-60 bg-opacity-50 pointer-events-none aspect-[896/1831]">
-          <AspectRatio ratio={896 / 1831} className="pointer-events-none relative z-50 aspect-[896/1831] w-full">
+          <AspectRatio ref={phoneCoverRef} ratio={896 / 1831} className="pointer-events-none relative z-50 aspect-[896/1831] w-full">
             <Image width={1000} height={1000} alt="phone" src='/phone-template.png' className="pointer-events-none select-none z-50" />
           </AspectRatio>
 
@@ -69,6 +146,20 @@ function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConf
             bottomLeft: <HandleComponent />,
             topRight: <HandleComponent />,
             topLeft: <HandleComponent />
+          }}
+          onResizeStop={(_, __, ref, ___, { x, y }) => {
+            setRenderedDimension({
+              height: parseInt(ref.style.height.slice(0, -2)),
+              width: parseInt(ref.style.width.slice(0, -2))
+            });
+
+            setRenderedPosition({ x, y });
+          }}
+
+          onDragStop={(_, data) => {
+            const { x, y } = data;
+
+            setRenderedPosition({ x, y });
           }}>
           <div className="relative h-full w-full">
             <Image width={1000} height={1000} src={imageUrl} alt="custom image" className="pointer-events-none" />
@@ -118,7 +209,7 @@ function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConf
                       </Button>
                     </DropdownMenuTrigger>
 
-                    <DropdownMenuContent>
+                    <DropdownMenuContent className="w-full">
                       {models.options.map((model) => (
                         <DropdownMenuItem key={model.label} className={cn("flex text-sm gap-1 items-center p-1.5 cursor-default hover:bg-zinc-100",
                           { "bg-zinc-100": model.label === options.model.label }
@@ -187,13 +278,13 @@ function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConf
                 {formatPrice((base_price + options.finish.price + options.material.price) / 100, 'USD')}
               </p>
 
-              <Button size="sm" className="w-full">Continue <ArrowRight className="h-4 w-4 ml-1.5 inline" /></Button>
+              <Button onClick={() => saveConfiguration()} size="sm" className="w-full">Continue <ArrowRight className="h-4 w-4 ml-1.5 inline" /></Button>
             </div>
           </div>
         </div>
       </div>
-    </div >
-  )
+    </div>
+  );
 }
 
-export default DesignConfiguration
+export default DesignConfiguration;

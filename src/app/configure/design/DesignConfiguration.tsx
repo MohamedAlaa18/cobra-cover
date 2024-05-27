@@ -224,7 +224,7 @@ function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConf
                 </div>
 
                 {[materials, finishes].map(({ name, options: selectableOptions }) => (
-                  <RadioGroup key={name} value={options[name as OptionType] || selectableOptions[0]}
+                  <RadioGroup key={name} value={options[name as OptionType]}
                     onChange={(value) => handleOptionChange(name as OptionType, value)}>
                     <Label>
                       {name.slice(0, 1).toUpperCase() + name.slice(1)}

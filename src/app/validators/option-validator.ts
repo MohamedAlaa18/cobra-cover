@@ -11,7 +11,7 @@ export const colors = [
 ] as const
 
 export const models = {
-    name: "models",
+    name: "model",
     options: [
         { label: "iPhone X", value: "iphoneX" },
         { label: "iPhone 11", value: "iphone11" },
@@ -23,7 +23,7 @@ export const models = {
 } as const
 
 export const materials = {
-    name: "materials",
+    name: "material",
     options: [
         { label: "Silicone", value: "silicone", description: undefined, price: product_prices.material.silicone },
         { label: "Soft polycarbonate", value: "polycarbonate", description: "Scratch-resistant coating", price: product_prices.material.polycarbonate },
@@ -31,7 +31,7 @@ export const materials = {
 } as const
 
 export const finishes = {
-    name: "finishes",
+    name: "finish",
     options: [
         { label: "Smooth Finish", value: "smooth", description: undefined, price: product_prices.finish.smooth },
         { label: "Textured Finish", value: "textured", description: "Soft grippy textured", price: product_prices.finish.textured },

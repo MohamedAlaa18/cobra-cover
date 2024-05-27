@@ -2,7 +2,7 @@
 import HandleComponent from "@/components/HandleComponent";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import Image from "next/image";
 import { Rnd } from 'react-rnd';
 import { RadioGroup } from '@headlessui/react';
@@ -170,6 +170,10 @@ function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConf
                               ) : null}
                             </span>
                           </span>
+
+                          <RadioGroup.Description className="mt-2 flex text-sm sm:ml-4 sm:mt-0 sm:flex-col sm:text-right" as="span">
+                            <span className="font-medium text-gray-900">{formatPrice(option.price / 100, 'USD')}</span>
+                          </RadioGroup.Description>
                         </RadioGroup.Option>
                       ))}
                     </div>

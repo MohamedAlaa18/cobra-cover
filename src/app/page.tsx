@@ -1,4 +1,3 @@
-import { Icons } from '@/components/Icons';
 import MaxWithWrapper from '@/components/MaxWithWrapper';
 import Phone from '@/components/Phone';
 import Reviews from '@/components/Reviews';
@@ -139,13 +138,14 @@ export default function Home() {
 
           <div className='mx-auto max-w-6xl px-6 lg:px-8'>
             <div className='relative flex flex-col items-center justify-center md:flex-row'>
-              <div className='relative h-auto md:h-full w-full md:justify-self-end max-w-sm rounded-xl bg-gray-900/5 ring-[2px] ring-green-600 lg:rounded-2xl'>                <Image
-                width={400}
-                height={600}
-                src='/horse.jpg'
-                alt='horse'
-                className='rounded-xl lg:rounded-2xl objet-cover bg-white shadow-2xl ring-1 bg-gray-900/5 w-full h-full'
-              />
+              <div className='relative h-auto md:h-full w-full md:justify-self-end max-w-sm rounded-xl bg-gray-900/5  lg:rounded-2xl'>
+                <Image
+                  width={400}
+                  height={600}
+                  src='/horse.jpg'
+                  alt='horse'
+                  className='rounded-xl lg:rounded-2xl objet-cover bg-white shadow-2xl bg-gray-900/5 ring-[2px] ring-gray-900 w-full h-full'
+                />
               </div>
 
               <div className='h-36'>

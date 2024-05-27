@@ -13,8 +13,8 @@ function Phone({ imgScr, className, dark = false, ...props }: phoneProps) {
             className={cn(" relative pointer-events-none z-50 overflow-hidden", className)}
             {...props}>
             <Image
-                width={200}
-                height={200}
+                width={1000}
+                height={1000}
                 src={
                     dark
                         ? '/phone-template-dark-edges.png'
@@ -25,7 +25,7 @@ function Phone({ imgScr, className, dark = false, ...props }: phoneProps) {
             />
 
             <div className=" absolute -z-10 inset-0">
-                <Image width={200} height={200} src={imgScr} alt='phone-overlay' className="object-cover" />
+                <Image width={1000} height={1000} src={imgScr} alt='phone-overlay' className="object-cover" />
             </div>
         </div>
     )

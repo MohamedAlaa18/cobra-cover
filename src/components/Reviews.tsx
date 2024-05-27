@@ -131,7 +131,8 @@ function Reviews() {
                 src='/what-people-are-buying.png'
                 alt='people'
                 className='absolute select-none hidden xl:block -left-32 top-1/3 w-40 lg:w-52'
-                aria-hidden='true' />
+                aria-hidden='true'
+                priority />
 
             <ReviewGrid />
         </MaxWithWrapper>

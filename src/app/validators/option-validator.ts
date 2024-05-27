@@ -10,7 +10,6 @@ export const colors = [
     { label: "Rose", value: "rose", tw: "rose-950" },
 ] as const
 
-
 export const models = {
     name: "models",
     options: [

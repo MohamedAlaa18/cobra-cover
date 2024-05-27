@@ -21,8 +21,9 @@ interface DesignConfigurationProps {
   imageDimensions: { width: number, height: number }
 }
 
-function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConfigurationProps) {
+type OptionType = 'color' | 'model' | 'material' | 'finish';
 
+function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConfigurationProps) {
   const [options, setOptions] = useState<{
     color: (typeof colors)[number],
     model: (typeof models.options)[number],
@@ -33,7 +34,14 @@ function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConf
     model: models.options[0],
     material: materials.options[0],
     finish: finishes.options[0]
-  })
+  });
+
+  const handleOptionChange = (name: OptionType, value: any) => {
+    setOptions((prevOptions) => ({
+      ...prevOptions,
+      [name]: value
+    }));
+  };
 
   return (
     <div className="relative mt-20 grid grid-cols-3 mb-20 pb-20">
@@ -81,12 +89,7 @@ function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConf
               <div className="flex flex-col gap-6">
 
                 <RadioGroup value={options.color}
-                  onChange={(value) => {
-                    setOptions((option) => ({
-                      ...option,
-                      color: value
-                    }))
-                  }}>
+                  onChange={(value) => handleOptionChange('color', value)}>
 
                   <Label>Color: {options.color.label}</Label>
 
@@ -117,15 +120,10 @@ function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConf
 
                     <DropdownMenuContent>
                       {models.options.map((model) => (
-                        <DropdownMenuItem key={model.label} className={cn("flex text-sm gap-1 items-center p-1.5 cursor-default hover:bg-zinc-100 px-[6rem]",
+                        <DropdownMenuItem key={model.label} className={cn("flex text-sm gap-1 items-center p-1.5 cursor-default hover:bg-zinc-100",
                           { "bg-zinc-100": model.label === options.model.label }
                         )}
-                          onClick={() => {
-                            setOptions((option) => ({
-                              ...option,
-                              model
-                            }))
-                          }}>
+                          onClick={() => handleOptionChange('model', model)}>
                           <Check className={cn("mr-2 h-4 w-4", model.label === options.model.label ? "opacity-100" : "opacity-0")} />
                           {model.label}
                         </DropdownMenuItem>
@@ -135,13 +133,8 @@ function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConf
                 </div>
 
                 {[materials, finishes].map(({ name, options: selectableOptions }) => (
-                  <RadioGroup key={name} value={options[name]}
-                    onChange={(value) => {
-                      setOptions((option) => ({
-                        ...option,
-                        [name]: value
-                      }))
-                    }}>
+                  <RadioGroup key={name} value={options[name as OptionType]}
+                    onChange={(value) => handleOptionChange(name as OptionType, value)}>
                     <Label>
                       {name.slice(0, 1).toUpperCase() + name.slice(1)}
                     </Label>
@@ -194,7 +187,7 @@ function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConf
                 {formatPrice((base_price + options.finish.price + options.material.price) / 100, 'USD')}
               </p>
 
-              <Button size="sm" className="w-full">Continue <ArrowRight className="h-4 w-4 ml-1.5 inline"/></Button>
+              <Button size="sm" className="w-full">Continue <ArrowRight className="h-4 w-4 ml-1.5 inline" /></Button>
             </div>
           </div>
         </div>

@@ -224,7 +224,7 @@ function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConf
                 </div>
 
                 {[materials, finishes].map(({ name, options: selectableOptions }) => (
-                  <RadioGroup key={name} value={options[name as OptionType]}
+                  <RadioGroup key={name} value={options[name as OptionType] || selectableOptions[0]}
                     onChange={(value) => handleOptionChange(name as OptionType, value)}>
                     <Label>
                       {name.slice(0, 1).toUpperCase() + name.slice(1)}
@@ -236,9 +236,7 @@ function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConf
                           className={({ active, checked }) =>
                             cn(
                               'relative block cursor-pointer rounded-lg bg-white px-6 py-4 shadow-sm border-2 border-zinc-200 focus:outline-none ring-0 focus:ring-0 outline-none sm:flex sm:justify-between',
-                              {
-                                'border-primary': active || checked,
-                              }
+                              { 'border-primary': active || checked }
                             )
                           }>
 

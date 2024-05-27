@@ -12,7 +12,8 @@ import { Label } from "@/components/ui/label";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { ArrowRight, Check, ChevronsUpDown } from "lucide-react";
+import { base_price } from "@/app/config/products";
 
 interface DesignConfigurationProps {
   configId: string,
@@ -116,7 +117,7 @@ function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConf
 
                     <DropdownMenuContent>
                       {models.options.map((model) => (
-                        <DropdownMenuItem key={model.label} className={cn("flex text-sm gap-1 items-center p-1.5 cursor-default hover:bg-zinc-100",
+                        <DropdownMenuItem key={model.label} className={cn("flex text-sm gap-1 items-center p-1.5 cursor-default hover:bg-zinc-100 px-[6rem]",
                           { "bg-zinc-100": model.label === options.model.label }
                         )}
                           onClick={() => {
@@ -183,6 +184,20 @@ function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConf
             </div>
           </div>
         </ScrollArea>
+
+        <div className="w-full px-8 h-16 bg-white">
+          <div className="h-px w-full bg-zinc-200" />
+
+          <div className="w-full h-full flex justify-end items-center">
+            <div className="w-full flex gap-6 items-center">
+              <p className="font-medium whitespace-nowrap">
+                {formatPrice((base_price + options.finish.price + options.material.price) / 100, 'USD')}
+              </p>
+
+              <Button size="sm" className="w-full">Continue <ArrowRight className="h-4 w-4 ml-1.5 inline"/></Button>
+            </div>
+          </div>
+        </div>
       </div>
     </div >
   )

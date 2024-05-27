@@ -7,12 +7,12 @@ import Image from "next/image";
 import { Rnd } from 'react-rnd';
 import { RadioGroup } from '@headlessui/react';
 import { useState } from "react";
-import { colors, models } from "@/app/validators/option-validator";
+import { colors, finishes, materials, models } from "@/app/validators/option-validator";
 import { Label } from "@/components/ui/label";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown } from "lucide-react";
 
 interface DesignConfigurationProps {
   configId: string,
@@ -22,9 +22,16 @@ interface DesignConfigurationProps {
 
 function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConfigurationProps) {
 
-  const [options, setOptions] = useState<{ color: (typeof colors)[number], model: (typeof models.options)[number] }>({
+  const [options, setOptions] = useState<{
+    color: (typeof colors)[number],
+    model: (typeof models.options)[number],
+    material: (typeof materials.options)[number]
+    finish: (typeof finishes.options)[number]
+  }>({
     color: colors[0],
-    model: models.options[0]
+    model: models.options[0],
+    material: materials.options[0],
+    finish: finishes.options[0]
   })
 
   return (
@@ -111,20 +118,69 @@ function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConf
                       {models.options.map((model) => (
                         <DropdownMenuItem key={model.label} className={cn("flex text-sm gap-1 items-center p-1.5 cursor-default hover:bg-zinc-100",
                           { "bg-zinc-100": model.label === options.model.label }
-                        )}>
+                        )}
+                          onClick={() => {
+                            setOptions((option) => ({
+                              ...option,
+                              model
+                            }))
+                          }}>
+                          <Check className={cn("mr-2 h-4 w-4", model.label === options.model.label ? "opacity-100" : "opacity-0")} />
                           {model.label}
                         </DropdownMenuItem>
                       ))}
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
+
+                {[materials, finishes].map(({ name, options: selectableOptions }) => (
+                  <RadioGroup key={name} value={options[name]}
+                    onChange={(value) => {
+                      setOptions((option) => ({
+                        ...option,
+                        [name]: value
+                      }))
+                    }}>
+                    <Label>
+                      {name.slice(0, 1).toUpperCase() + name.slice(1)}
+                    </Label>
+
+                    <div className="mt-3 space-y-4">
+                      {selectableOptions.map((option) => (
+                        <RadioGroup.Option key={option.value} value={option}
+                          className={({ active, checked }) =>
+                            cn(
+                              'relative block cursor-pointer rounded-lg bg-white px-6 py-4 shadow-sm border-2 border-zinc-200 focus:outline-none ring-0 focus:ring-0 outline-none sm:flex sm:justify-between',
+                              {
+                                'border-primary': active || checked,
+                              }
+                            )
+                          }>
+
+                          <span className="flex items-center">
+                            <span className="flex flex-col text-sm">
+                              <RadioGroup.Label className="font-medium text-gray-900" as="span">
+                                {option.label}
+                              </RadioGroup.Label>
+
+                              {option.description ? (
+                                <RadioGroup.Description className="text-gray-500" as="span">
+                                  <span className="block sm:inline">{option.description}</span>
+                                </RadioGroup.Description>
+                              ) : null}
+                            </span>
+                          </span>
+                        </RadioGroup.Option>
+                      ))}
+                    </div>
+                  </RadioGroup>
+                ))}
               </div>
             </div>
-            </div >
+          </div>
         </ScrollArea>
       </div>
-    </div>
-
+    </div >
   )
 }
 

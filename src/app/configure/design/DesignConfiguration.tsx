@@ -298,7 +298,12 @@ function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConf
                 {formatPrice((base_price + options.finish.price + options.material.price) / 100, 'USD')}
               </p>
 
-              <Button onClick={() => saveConfiguration()} size="sm" className="w-full">Continue <ArrowRight className="h-4 w-4 ml-1.5 inline" /></Button>
+              <Button onClick={() => saveConfig({
+                configId, color: options.color.value,
+                model: options.model.value,
+                material: options.material.value,
+                finish: options.finish.value
+              })} size="sm" className="w-full">Continue <ArrowRight className="h-4 w-4 ml-1.5 inline" /></Button>
             </div>
           </div>
         </div>

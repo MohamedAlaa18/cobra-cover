@@ -24,8 +24,8 @@ function Phone({ imgScr, className, dark = false, ...props }: phoneProps) {
                 className="pointer-events-none z-50 select-none"
             />
 
-            <div className=" absolute -z-10 inset-0">
-                <Image width={1000} height={1000} src={imgScr} alt='phone-overlay' className="object-cover" />
+            <div className="absolute -z-10 inset-0">
+                <Image width={1000} height={1000} src={imgScr} alt='phone-overlay' className="object-cover min-w-full min-h-full" />
             </div>
         </div>
     )

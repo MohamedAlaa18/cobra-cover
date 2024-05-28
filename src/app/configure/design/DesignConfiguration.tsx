@@ -17,6 +17,9 @@ import { ArrowRight, Check, ChevronsUpDown } from "lucide-react";
 import { base_price } from "@/app/config/products";
 import { useUploadThing } from "@/lib/uploadthing";
 import { toast } from "@/components/ui/use-toast";
+import { useMutation } from "@tanstack/react-query";
+import { saveConfig as _saveConfig, saveConfigArgs } from "./actions";
+import { useRouter } from "next/navigation";
 
 interface DesignConfigurationProps {
   configId: string,
@@ -27,6 +30,25 @@ interface DesignConfigurationProps {
 type OptionType = 'color' | 'model' | 'material' | 'finish';
 
 function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConfigurationProps) {
+  const router = useRouter();
+
+  const { mutate: saveConfig } = useMutation({
+    mutationKey: ['save-config'],
+    mutationFn: async (args: saveConfigArgs) => {
+      await Promise.all([saveConfiguration(), _saveConfig(args)])
+    },
+    onError: () => {
+      toast({
+        title: "Some thing went Wrong",
+        description: "there was a error saving on our end. Please try again.",
+        variant: 'destructive'
+      })
+    },
+    onSuccess: () => {
+      router.push(`/configure/preview?id=${configId}`)
+    }
+  })
+
   const [options, setOptions] = useState<{
     color: (typeof colors)[number],
     model: (typeof models.options)[number],
@@ -102,7 +124,7 @@ function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConf
     } catch (error) {
       toast({
         title: "Some thing went Wrong",
-        description: "there was a problem saving  your configuration ,please try again.",
+        description: "there was a problem saving your configuration ,please try again.",
         variant: 'destructive'
       })
     }
@@ -209,13 +231,13 @@ function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConf
                       </Button>
                     </DropdownMenuTrigger>
 
-                    <DropdownMenuContent className="w-full">
+                    <DropdownMenuContent>
                       {models.options.map((model) => (
                         <DropdownMenuItem key={model.label} className={cn("flex text-sm gap-1 items-center p-1.5 cursor-default hover:bg-zinc-100",
                           { "bg-zinc-100": model.label === options.model.label }
                         )}
                           onClick={() => handleOptionChange('model', model)}>
-                          <Check className={cn("mr-2 h-4 w-4", model.label === options.model.label ? "opacity-100" : "opacity-0")} />
+                          <Check className={cn("mr-2 h-4 w-4 text-primary", model.label === options.model.label ? "opacity-100" : "opacity-0")} />
                           {model.label}
                         </DropdownMenuItem>
                       ))}

@@ -5,6 +5,7 @@ import Phone from '@/components/Phone';
 import { Button } from '@/components/ui/button';
 import { cn, formatPrice } from '@/lib/utils';
 import { Configuration } from '@prisma/client';
+import { useMutation } from '@tanstack/react-query';
 import { ArrowRight, Check } from 'lucide-react';
 import { useEffect, useState } from 'react'
 import Confetti from 'react-dom-confetti'
@@ -25,6 +26,11 @@ function DesignPreview({ configuration }: { configuration: Configuration }) {
         totalPrice += product_prices.material.polycarbonate;
     if (finish === "textured")
         totalPrice += product_prices.finish.textured;
+
+    // const {}= useMutation({
+    //     mutationKey:["get-checkout-session"],
+    //     mutationFn:
+    // })
 
     return (
         <>

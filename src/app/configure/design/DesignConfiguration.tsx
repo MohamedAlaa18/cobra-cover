@@ -16,10 +16,10 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Check, ChevronsUpDown } from "lucide-react";
 import { base_price } from "@/app/config/products";
 import { useUploadThing } from "@/lib/uploadthing";
-import { toast } from "@/components/ui/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import { saveConfig as _saveConfig, saveConfigArgs } from "./actions";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
 
 interface DesignConfigurationProps {
   configId: string,
@@ -30,6 +30,7 @@ interface DesignConfigurationProps {
 type OptionType = 'color' | 'model' | 'material' | 'finish';
 
 function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConfigurationProps) {
+  const { toast } = useToast();
   const router = useRouter();
 
   const { mutate: saveConfig } = useMutation({

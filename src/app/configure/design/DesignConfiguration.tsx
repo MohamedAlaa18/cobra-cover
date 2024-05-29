@@ -185,7 +185,7 @@ function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConf
             setRenderedPosition({ x, y });
           }}>
           <div className="relative h-full w-full">
-            <Image width={1000} height={1000} src={imageUrl} alt="custom image" className="pointer-events-none" />
+            <Image width={1000} height={1000} src={imageUrl} alt="custom image" className="pointer-events-none" priority />
           </div>
         </Rnd>
       </div>

@@ -54,7 +54,7 @@ function PhonePreview({ croppedImageUrl, color }: { croppedImageUrl: string, col
             </div>
 
             <div className='relative w-full h-full z-40'>
-                <Image src='/clearphone.png' alt='phone' fill className='w-full h-full antialiased rounded-md' />
+                <Image src='/clearphone.png' alt='phone' fill className='w-full h-full antialiased rounded-md' priority />
             </div>
         </AspectRatio>
     )

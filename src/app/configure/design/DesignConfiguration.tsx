@@ -33,7 +33,7 @@ function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConf
   const { toast } = useToast();
   const router = useRouter();
 
-  const { mutate: saveConfig } = useMutation({
+  const { mutate: saveConfig, isPending } = useMutation({
     mutationKey: ['save-config'],
     mutationFn: async (args: saveConfigArgs) => {
       await Promise.all([saveConfiguration(), _saveConfig(args)])
@@ -44,7 +44,7 @@ function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConf
         description: "there was a error saving on our end. Please try again.",
         variant: 'destructive'
       })
-    }, 
+    },
     onSuccess: () => {
       router.push(`/configure/preview?id=${configId}`)
     }
@@ -299,12 +299,19 @@ function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConf
                 {formatPrice((base_price + options.finish.price + options.material.price) / 100, 'USD')}
               </p>
 
-              <Button onClick={() => saveConfig({
-                configId, color: options.color.value,
-                model: options.model.value,
-                material: options.material.value,
-                finish: options.finish.value
-              })} size="sm" className="w-full">Continue <ArrowRight className="h-4 w-4 ml-1.5 inline" /></Button>
+              <Button
+                isLoading={isPending}
+                disabled={isPending}
+                loadingText="Saving"
+                onClick={() => saveConfig({
+                  configId, color: options.color.value,
+                  model: options.model.value,
+                  material: options.material.value,
+                  finish: options.finish.value
+                })}
+                size="sm" className="w-full">
+                Continue <ArrowRight className="h-4 w-4 ml-1.5 inline" />
+              </Button>
             </div>
           </div>
         </div>

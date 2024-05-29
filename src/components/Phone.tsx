@@ -10,7 +10,7 @@ interface phoneProps extends HtmlHTMLAttributes<HTMLDivElement> {
 function Phone({ imgScr, className, dark = false, ...props }: phoneProps) {
     return (
         <div
-            className={cn(" relative pointer-events-none z-50 overflow-hidden", className)}
+            className={cn("relative pointer-events-none z-50 overflow-hidden", className)}
             {...props}>
             <Image
                 width={1000}

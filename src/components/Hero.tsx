@@ -20,7 +20,7 @@ function Hero() {
             <div className='col-span-2 px-6 lg-px-0 lg:pt-4'>
                 <div className='relative mx-auto text-center lg:text-left flex flex-col items-center lg:items-start'>
                     <div className='absolute w-28 left-0 -top-20 hidden lg:block'>
-                        <Image src='/snake-1.png' width={200} height={200} className='w-full' alt='snake' />
+                        <Image src='/snake-1.png' fill className='h-20 w-20' alt='snake' />
                     </div>
 
                     <h1 className='relative w-fit tracking-tight text-balance mt-16 font-bold !leading-tight text-gray-900 text-5xl md:text-6xl lg:text-7xl'>

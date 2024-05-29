@@ -44,7 +44,7 @@ function DesignConfiguration({ configId, imageUrl, imageDimensions }: DesignConf
         description: "there was a error saving on our end. Please try again.",
         variant: 'destructive'
       })
-    },
+    }, 
     onSuccess: () => {
       router.push(`/configure/preview?id=${configId}`)
     }

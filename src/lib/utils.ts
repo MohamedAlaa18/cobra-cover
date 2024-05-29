@@ -17,7 +17,7 @@ export const formatPrice = (price: number, currency: 'EGP' | 'USD') => {
 
 
 export function constructMetadata({
-  title = 'CobraCover - custom high-quality phone cases',
+  title = 'CobraCover',
   description = 'Create custom high-quality phone cases in seconds',
   image = '/thumbnail.jpg',
   icons = '/favicon.ico',

@@ -1,5 +1,5 @@
 import Hero from '@/components/Hero';
-import MaxWithWrapper from '@/components/MaxWithWrapper';
+import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import Phone from '@/components/Phone';
 import Reviews from '@/components/Reviews';
 import Testimonials from '@/components/Testimonials';
@@ -31,7 +31,7 @@ export default function Home() {
       </section>
 
       <section>
-        <MaxWithWrapper className='py-24'>
+        <MaxWidthWrapper className='py-24'>
           <div className='mb-12 px-6 lg:px-8'>
             <div className='mx-auto max-w-2xl sm:text-center'>
               <h2 className='order-1 mt-2 tracking-tight text-center text-balance !leading-tight font-bold text-5xl md:text-6xl text-gray-900'>
@@ -86,7 +86,7 @@ export default function Home() {
               <ArrowRight className='h-4 w-4' />
             </Link>
           </div>
-        </MaxWithWrapper>
+        </MaxWidthWrapper>
       </section>
     </div >
   );

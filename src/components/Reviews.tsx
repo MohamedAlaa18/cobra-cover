@@ -1,6 +1,6 @@
 "use client"
 import Image from "next/image";
-import MaxWithWrapper from "./MaxWithWrapper";
+import MaxWidthWrapper from "./MaxWidthWrapper";
 import { HTMLAttributes, useEffect, useRef, useState } from "react";
 import { useInView } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -125,7 +125,7 @@ function ReviewGrid() {
 
 function Reviews() {
     return (
-        <MaxWithWrapper className="relative max-w-5xl flex items-center justify-center">
+        <MaxWidthWrapper className="relative max-w-5xl flex items-center justify-center">
             <Image
                 width={200} height={200}
                 src='/what-people-are-buying.png'
@@ -135,7 +135,7 @@ function Reviews() {
                 priority />
 
             <ReviewGrid />
-        </MaxWithWrapper>
+        </MaxWidthWrapper>
     );
 }
 

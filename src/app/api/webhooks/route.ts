@@ -18,9 +18,11 @@ export async function POST(req: Request) {
         }
 
         const event = stripe.webhooks.constructEvent(body, signature, process.env.STRIPE_WEBHOOK_SECRET!);
+        console.log(JSON.stringify(event, null, 2));
 
         if (event.type === 'checkout.session.completed') {
-            if (!event.data.object.customer_details?.email) {
+            const customerDetails = event.data.object.customer_details;
+            if (!customerDetails?.email) {
                 throw new Error('Missing user email');
             }
 
@@ -31,33 +33,32 @@ export async function POST(req: Request) {
                 throw new Error('Invalid request metadata');
             }
 
-            const billingAddress = session.customer_details!.address;
-            const shippingAddress = session.shipping_details!.address;
+            const shippingDetails = event.data.object.shipping_details;
+            const billingAddress = customerDetails.address;
+            const shippingAddress = shippingDetails?.address;
 
             const updatedOrder = await db.order.update({
-                where: {
-                    id: orderId,
-                },
+                where: { id: orderId },
                 data: {
                     isPaid: true,
                     ShippingAddress: {
                         create: {
-                            name: session.customer_details!.name!,
-                            city: shippingAddress!.city!,
-                            country: shippingAddress!.country!,
-                            postalCode: shippingAddress!.postal_code!,
-                            street: shippingAddress!.line1!,
-                            state: shippingAddress!.state,
+                            name: customerDetails.name!,
+                            city: shippingAddress?.city || '',
+                            country: shippingAddress?.country || '',
+                            postalCode: shippingAddress?.postal_code || '',
+                            street: shippingAddress?.line1 || '',
+                            state: shippingAddress?.state || '',
                         },
                     },
                     BillingAddress: {
                         create: {
-                            name: session.customer_details!.name!,
-                            city: billingAddress!.city!,
-                            country: billingAddress!.country!,
-                            postalCode: billingAddress!.postal_code!,
-                            street: billingAddress!.line1!,
-                            state: billingAddress!.state,
+                            name: customerDetails.name!,
+                            city: billingAddress?.city || '',
+                            country: billingAddress?.country || '',
+                            postalCode: billingAddress?.postal_code || '',
+                            street: billingAddress?.line1 || '',
+                            state: billingAddress?.state || '',
                         },
                     },
                 },
@@ -65,19 +66,19 @@ export async function POST(req: Request) {
 
             await resend.emails.send({
                 from: "cobraCover <mohamed.alaa.elhefny@gmail.com>",
-                to: [event.data.object.customer_details.email],
+                to: [customerDetails.email],
                 subject: 'Thanks for your order!',
                 react: OrderReceivedEmail({
                     orderId,
                     orderDate: updatedOrder.createdAt.toLocaleDateString(),
-                    // @ts-ignore
+                     // @ts-ignore
                     shippingAddress: {
-                        name: session.customer_details!.name!,
-                        city: shippingAddress!.city!,
-                        country: shippingAddress!.country!,
-                        postalCode: shippingAddress!.postal_code!,
-                        street: shippingAddress!.line1!,
-                        state: shippingAddress!.state,
+                        name: customerDetails.name!,
+                        city: shippingAddress?.city || '',
+                        country: shippingAddress?.country || '',
+                        postalCode: shippingAddress?.postal_code || '',
+                        street: shippingAddress?.line1 || '',
+                        state: shippingAddress?.state || '',
                     },
                 }),
             });
@@ -90,6 +91,6 @@ export async function POST(req: Request) {
         return NextResponse.json(
             { message: 'Something went wrong', ok: false },
             { status: 500 }
-        )
+        );
     }
 }

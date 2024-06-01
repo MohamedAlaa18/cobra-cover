@@ -29,9 +29,7 @@ function DesignPreview({ configuration }: { configuration: Configuration }) {
     const { color, model, finish, material } = configuration;
     const tw = colors.find((supportedColor) => supportedColor.value === color)?.tw;
 
-
     const { label: modelLabel } = models.options.find(({ value }) => value === model)!;
-
 
     let totalPrice = base_price;
     if (material === "polycarbonate")
@@ -54,7 +52,6 @@ function DesignPreview({ configuration }: { configuration: Configuration }) {
             })
         },
     })
-
 
     const handCheckout = () => {
         if (user) {
